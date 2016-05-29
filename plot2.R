@@ -22,11 +22,11 @@ subset_data$datetime <-
 subset_data$Global_active_power <-
   as.numeric(as.character(subset_data$Global_active_power))
 subset_data$Sub_metering_1 <-
-  as.numeric(as.character(subset_data$Sub_metering_1)) / 1000 # convert to kw
+  as.numeric(as.character(subset_data$Sub_metering_1))
 subset_data$Sub_metering_2 <-
-  as.numeric(as.character(subset_data$Sub_metering_2)) / 1000 #convert to kw
+  as.numeric(as.character(subset_data$Sub_metering_2))
 subset_data$Sub_metering_3 <-
-  as.numeric(as.character(subset_data$Sub_metering_3)) / 1000 # 00 #  convert to kw
+  as.numeric(as.character(subset_data$Sub_metering_3)) 
 
 # LINES PLOT GLOBAL ACTIVE POWER
 plot(
