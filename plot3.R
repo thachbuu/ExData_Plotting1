@@ -1,3 +1,4 @@
+# LOADING DATA SOURCE
 dataSource = "household_power_consumption.zip"
 
 if (!file.exists(dataSource)) {
@@ -12,24 +13,30 @@ if (!file.exists("household_power_consumption.txt")) {
   unzip(dataSource)
 }
 
-dt <- read.csv2("household_power_consumption.txt")
-dt01_02 <- dt[dt$Date %in% c("1/2/2007", "2/2/2007"),]
-dt01_02$Timestamp <-
-  strptime(paste(dt01_02$Date, dt01_02$Time, sep = " "),"%d/%m/%Y %H:%M:%S")
-dt01_02$Global_active_power <-
-  as.numeric(dt01_02$Global_active_power)
-dt01_02$Sub_metering_1 <- as.numeric(dt01_02$Sub_metering_1)
-dt01_02$Sub_metering_2 <- as.numeric(dt01_02$Sub_metering_2)
-dt01_02$Sub_metering_3 <- as.numeric(dt01_02$Sub_metering_3)
+# PREPARE DATA
+original_data <- read.csv2("household_power_consumption.txt")
+subset_data <-
+  original_data[original_data$Date %in% c("1/2/2007", "2/2/2007"),]
+subset_data$datatime <-
+  strptime(paste(subset_data$Date, subset_data$Time, sep = " "),"%d/%m/%Y %H:%M:%S")
+subset_data$Global_active_power <-
+  as.numeric(as.character(subset_data$Global_active_power))
+subset_data$Sub_metering_1 <-
+  as.numeric(as.character(subset_data$Sub_metering_1))
+subset_data$Sub_metering_2 <-
+  as.numeric(as.character(subset_data$Sub_metering_2))
+subset_data$Sub_metering_3 <-
+  as.numeric(as.character(subset_data$Sub_metering_3))
 
 #plot 3
-png("plot3.png", width = 480, height = 480)
 plot(
-  dt01_02$Timestamp, dt01_02$Sub_metering_1, type = "l", xlab = "", ylab = "Enery sub metering"
+  subset_data$datatime, subset_data$Sub_metering_1, type = "l", xlab = "", ylab = "Energy sub metering"
 )
-lines(dt01_02$Timestamp,dt01_02$Sub_metering_2,  col = "red")
-lines(dt01_02$Timestamp, dt01_02$Sub_metering_3, col = "blue")
+lines(subset_data$datatime,subset_data$Sub_metering_2,  col = "red")
+lines(subset_data$datatime, subset_data$Sub_metering_3, col = "blue")
 legend(
-  "topright", c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), col = c("black","red", "blue"), lty = 1
+  "topright", c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), col = c("black","red", "blue"), lty = 1, cex = 0.8
 )
+
+dev.copy(device = png, "plot3.png", width = 480, height = 480)
 dev.off()
